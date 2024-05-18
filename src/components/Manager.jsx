@@ -6,7 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const Manager = () => {
     const ref = useRef()
-    const passwordRef = useRef()
+    const passwordRef = useRef() 
     const [form, setform] = useState({ site: "", username: "", password: "" })
     const [passwordArray, setpasswordArray] = useState([])
 
@@ -16,7 +16,7 @@ const Manager = () => {
             setpasswordArray(JSON.parse(passwords))
         }
     }, [])
-
+  
     const copyText = (text) => {
         toast('Copied to clipboard!', {
             position: "top-right",
@@ -31,7 +31,6 @@ const Manager = () => {
         navigator.clipboard.writeText(text)
     }
 
-
     const showPassword = () => {
         passwordRef.current.type = "password"
         if (ref.current.src.includes("icons/eyecross.png")) {
@@ -44,10 +43,14 @@ const Manager = () => {
     }
 
     const savePassword = () => {
-        setpasswordArray([...passwordArray, {...form,id:uuidv4()}])
-        localStorage.setItem("passwords", JSON.stringify([...passwordArray, {...form,id:uuidv4()}]))
-        console.log(passwordArray)
-        setform({ site: "", username: "", password: "" })
+        if(form.site.length > 3  && form.username.length >3 && form.password.length >3){
+            setpasswordArray([...passwordArray, {...form,id:uuidv4()}])
+            localStorage.setItem("passwords", JSON.stringify([...passwordArray, {...form,id:uuidv4()}]))
+            console.log(passwordArray)
+            setform({ site: "", username: "", password: "" })
+        }else{
+            toast("Error:Enter all credentials");
+        }
     }
 
     const deletePassword = (id) => {
@@ -89,9 +92,9 @@ const Manager = () => {
             />
             {/* Same as */}
             <ToastContainer />
-            <div className="absolute inset-0 -z-10 h-full w-full items-center px-5 py-24 [background:radial-gradient(125%_125%_at_50%_10%,#000_40%,#63e_100%)]"></div>
+            
 
-            <div className="mycontainer text-white flex flex-col justify-center text-center">
+            <div className="md:mycontainer text-white flex flex-col justify-center text-center min-h-[85.7vh]">
                 <div className='text-4xl'>
                     <span className='text-blue-700'>&lt;</span>
                     Pass
@@ -100,12 +103,12 @@ const Manager = () => {
                 <span className='text-blue-500 my-2'>Your own Passoword Manager</span>
 
                 <div className='flex flex-col p-4 gap-6 text-black items-center'>
-                    <input value={form.site} onChange={handleChange} placeholder='Enter website URL' className='rounded-full border-2 border-blue-600 p-4 py-1 w-full' type="text" name='site' />
-                    <div className='flex gap-6 w-full'>
-                        <input value={form.username} onChange={handleChange} placeholder='Enter Username' className='rounded-full border-2 border-blue-600 w-full p-4 py-1' type="text" name='username' />
+                    <input value={form.site} onChange={handleChange} placeholder='Enter website URL' className='rounded-full border-2 border-blue-600 p-4 py-1 w-full' type="text" name='site' id='site' />
+                    <div className='flex md:flex-row flex-col gap-6 w-full'>
+                        <input value={form.username} onChange={handleChange} placeholder='Enter Username' className='rounded-full border-2 border-blue-600 w-full p-4 py-1' type="text" name='username' id="username" />
                         <div className="relative">
                             <input ref={passwordRef} value={form.password} onChange={handleChange} placeholder='Enter Password' className='rounded-full border-2 border-blue-600 w-full p-4 py-1' type="password" name='password' />
-                            <span className='absolute right-1.5 top-1.5 cursor-pointer text-sm' onClick={showPassword}>
+                            <span className='absolute right-1.5 top-1.5 cursor-pointer text-sm' onClick={showPassword} id='password'>
                                 <img ref={ref} width={23} height={23} src="icons/eye.png" alt="" />
                             </span>
                         </div>
